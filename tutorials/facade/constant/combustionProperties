@@ -1,0 +1,81 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.4.x                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      combustionProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+//combustionModel  infinitelyFastChemistry;
+combustionModel  eddyDissipationModel;
+//combustionModel  eddyDissipationBertExtModel;
+//combustionModel  eddyDissipationFRVModel;
+
+eddyDissipationModelCoeffs
+{
+    semiImplicit no;
+    C_EDC       4.0;
+    C_Diff      4;
+    C_Stiff     1;
+}
+
+
+eddyDissipationFRVModelCoeffs
+{
+    semiImplicit no;
+    C_EDC       4.0;
+    C_Diff      4;   //0.5  //small number to turn off
+    C_Stiff     1;   //0.5e-10;    //small number to turn off
+
+    //- Using C3H8 as the fuel
+    ExtinctionStart 600;
+    cKa     0.05;
+    cKapa   0.7;
+    Cevap       0.4;
+
+    TadAir     2393;   //2324;
+    SLC1       28.0;   //93.0;
+    SLC2       9.47;   //12.4;
+    ZN         9.5;    //10.5;
+    fvSootAir  3.2;    //1.5;
+    O2Soot     0.135;  //0.162;
+    fixedXr    true; 
+}
+
+
+eddyDissipationModelCoeffs
+{
+    semiImplicit no;
+    C_EDC       4.0;
+    C_Diff      4;
+    C_Stiff     1;
+}
+
+eddyDissipationBertExtModelCoeffs
+{
+    semiImplicit    no;
+    C_EDC           2.0;
+    C_Diff          0;
+    C_Stiff         1;
+    Cstrain         0.3;
+    ExtinctionStart 30.0;
+    FuelStarExtTemp 2000;
+    FuelExtTemp     400;
+    Cevap           1.0;
+    radiativeHeatLoss    true;
+    XrExtinction         0.09;
+    nearWallExtinction   true;
+    nearWallStrain	 true;
+}
+
+
+// ************************************************************************* //

@@ -1,0 +1,4 @@
+- Facade fire geometry approximating that in DOI: 10.1002/fam.2923
+   * Gas burner in a room with a window opening and external facade
+   * Mass flow rate of burner adjustable in 0/U boundary condition file
+   * Chamber and external walls modeled as insulating, not combustible construction

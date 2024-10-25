@@ -1,0 +1,60 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1806                                 |
+|   \\  /    A nd           | Web:      http://www.OpenFOAM.com               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0/pyrolysisRegion";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 298;
+
+boundaryField
+{
+    solidFuel_top
+    {
+        //type            zeroGradient; 
+        // use constHTemperature to avoid the infamous 
+        // 'second peak' in the HRR as the material burns out
+        type            constHTemperature;
+        value           uniform 293;
+        Tinf            uniform 293;
+        h               uniform 20;
+    }
+
+    region0_to_solidFuelRegion_solidFuel
+    {
+        type                compressible::filmPyrolysisTemperatureCoupledFF;
+        filmRegion          filmRegion;
+        pyrolysisRegion     solidFuelRegion;
+        Tnbr                T;
+        K                   K;
+        kappaMethod         solidThermo;
+        neighbourFieldRadiativeName     qin;
+        neighbourFieldConvectiveName    convectiveHeatFlux_T;
+        fieldRadiativeName  none;
+        fieldConvectiveName none;
+        filmDeltaDry        0.0;
+        filmDeltaWet        3e-4;
+        filmDeltaDryCUP     1e-4;
+        filmDeltaWetCUP     2e-4;
+        qExtra              20.0e3;
+        value               $internalField;
+    }
+
+    oneDEmptyPatch
+    {
+        type            empty;
+    }
+}
+// ************************************************************************* //

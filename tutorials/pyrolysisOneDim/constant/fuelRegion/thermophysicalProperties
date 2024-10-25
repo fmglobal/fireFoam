@@ -1,0 +1,46 @@
+/*----------------------------------------------------------------------------*\
+| **************       ******* | Automatically Generated FOAM File            |
+| ****************   ********* |                                              |
+|             *********** **** | URL: https://dev.azure.com/fmglobal/Research |
+| ***********   *******   **** | Repo: fireFoam.newCaseConfiguration          |
+| ***********     ****    **** | Commit: 4e942a4                              |
+| ****                    **** | Created by: krismana                         |
+| ****                    **** | Created on: 2024 Sep 02                      |
+\*----------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant/fuelRegion";
+    object      thermophysicalProperties;
+}
+
+thermoType
+{
+	type	heSolidThermo;
+	mixture	reactingMixture;
+	transport	constIso;
+	thermo	hConst;
+	energy	sensibleEnthalpy;
+	equationOfState	rhoConst;
+	specie	specie;
+}
+
+chemistryReader	foamChemistryReader;
+
+foamChemistryFile	"$FOAM_CASE/constant/fuelRegion/reactions";
+
+foamChemistryThermoFile	"$FOAM_CASE/constant/fuelRegion/thermo.solid";
+
+gasThermoType
+{
+	transport	sutherland;
+	thermo	janaf;
+	equationOfState	perfectGas;
+	energy	sensibleEnthalpy;
+	specie	specie;
+}
+
+#include	"$FOAM_CASE/constant/fuelRegion/thermo.gas"

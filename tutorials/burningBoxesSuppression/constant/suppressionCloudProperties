@@ -1,0 +1,173 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1806                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      reactingCloud1Properties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solution
+{
+    active          true;
+    coupled         yes;
+    transient       yes;
+    cellValueSourceCorrection yes;
+    maxCo 0.6;
+
+    sourceTerms
+    {
+        schemes
+        {
+            rho             explicit 1;
+            U               semiImplicit 1;
+            Yi              semiImplicit 1;
+            h               semiImplicit 1;
+            radiation       explicit 1;
+        }
+    }
+
+    interpolationSchemes
+    {
+        rho             cell;
+        U               cellPoint;
+        thermo:mu       cell;
+        T               cell;
+        Cp              cell;
+        kappa           cell;
+        p               cell;
+        G               cell;
+    }
+
+    integrationSchemes
+    {
+        U               Euler;
+        T               analytical;
+    }
+}
+
+constantProperties
+{
+    parcelTypeId    1;
+
+    rhoMin          1e-15;
+    TMin            200;
+    pMin            1000;
+    minParticleMass 1e-15;
+
+    rho0            1000;
+    T0              300;
+    Cp0             4187;
+
+    youngsModulus   1e9;
+    poissonsRatio   0.35;
+
+    epsilon0        1;
+    f0              0.5;
+    Pr              0.7;
+    Tvap            273;
+    Tbp             373;
+
+    constantVolume  false;
+}
+
+subModels
+{
+    particleForces
+    {
+        sphereDrag;
+        gravity;
+    }
+
+    injectionModels
+    {
+        #include "coneInjectionDict"
+    }
+
+    dispersionModel none;
+
+    patchInteractionModel standardWallInteraction;
+
+    heatTransferModel RanzMarshall;
+
+    compositionModel singlePhaseMixture;
+
+    phaseChangeModel liquidEvaporationBoil;
+
+    surfaceFilmModel thermoSurfaceFilm;
+
+    radiation       off;
+
+    stochasticCollisionModel none;
+
+    standardWallInteractionCoeffs
+    {
+        type            escape;
+    }
+
+    RanzMarshallCoeffs
+    {
+        // thermal shielding
+        BirdCorrection  true; //false;
+    }
+
+    singlePhaseMixtureCoeffs
+    {
+        phases
+        (
+            liquid
+            {
+                H2O          1;
+            }
+        );
+    }
+
+    liquidEvaporationCoeffs
+    {
+        enthalpyTransfer enthalpyDifference;
+
+        activeLiquids
+        (
+            H2O
+        );
+    }
+
+    liquidEvaporationBoilCoeffs
+    {
+        enthalpyTransfer enthalpyDifference;
+
+        activeLiquids
+        (
+            H2O
+        );
+    }
+
+    thermoSurfaceFilmCoeffs
+    {
+        filmRegion      suppressionFilmProperties;
+        activeLiquid    H2O;
+        interactionType splashBai; // absorb;
+        deltaWet        0.0002;
+        Adry            2630;
+        Awet            1320;
+        Cf              0.6;
+        Vscale          1.0;
+        ejectedParcelType 10;
+    }
+}
+
+
+cloudFunctions
+{
+//VENT
+}
+
+// ************************************************************************* //

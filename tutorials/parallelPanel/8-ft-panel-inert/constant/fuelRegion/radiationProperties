@@ -1,0 +1,47 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.2.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      radiationProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+radiationModel  opaqueSolid;
+
+absorptionEmissionModel greyMeanSolidAbsorptionEmissionFF;
+
+
+greyMeanSolidAbsorptionEmissionFFCoeffs
+{
+    inert
+    {
+	absorptivity
+        {
+            method    fixedTemperature;
+            fixedTemperature 1200.0;
+            polynomialCoeffs 7(9.235724e-01 6.814120e-05 -1.735320e-07 -1.280374e-10 1.507418e-13 -4.679737e-17 4.847001e-21);
+        }
+        emissivity
+        {
+            method    polynomial;
+            polynomialCoeffs 7(9.235724e-01 6.814120e-05 -1.735320e-07 -1.280374e-10 1.507418e-13 -4.679737e-17 4.847001e-21);
+        }
+    }
+}
+
+scatterModel    none;
+
+transmissivityModel    none;
+
+
+// ************************************************************************* //

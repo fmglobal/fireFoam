@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+# Source tutorial clean functions
+. $WM_PROJECT_DIR/bin/tools/CleanFunctions
+
+cleanCase
+
+runApplication foamCleanPolyMesh
+rm -fr constant/*Region/polyMesh
+rm -fr log*
+rm -fr *.obj
+rm -rf VTK
+rm -fr postProcessing
+
+# -----------------------------------------------------------------------------

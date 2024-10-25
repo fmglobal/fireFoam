@@ -1,0 +1,108 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.2.2                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+actions
+(
+    // create face
+    {
+        name    Facade_Wall;
+        type    faceSet;
+        action  new;
+	    source  patchToFace;
+        sourceInfo
+        {
+	        name Facade_Wall;
+        }
+    }
+    {
+        name    Facade_Wall;
+        type    faceZoneSet;
+        action  new;
+        source  setToFaceZone;
+        sourceInfo
+        {
+            faceSet Facade_Wall;
+        }
+    }
+    
+    {
+        name    chamberVolume;
+        type    cellSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (-1.4 -0.7 0.449) (0 0.7 1.801);
+        }
+    }
+    
+    {
+        name    chamberVolume;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set chamberVolume;
+        }
+    }
+
+    {
+        name    Chamber_Wall;
+        type    faceSet;
+        action  new;
+        source  patchToFace;
+        sourceInfo
+        {
+           name Chamber_Wall;
+        }
+    }
+    
+    {
+        name    Chamber_Wall;
+        type    faceZoneSet;
+        action  new;
+        source  setToFaceZone;
+        sourceInfo
+        {
+            faceSet Chamber_Wall;
+        }
+    }
+
+     {
+     name        fSetWindow;
+     type        faceSet;
+     action      new;
+
+     source      boxToFace;
+     sourceInfo
+     {
+         box (0.349 -0.45 0.45) (0.351 0.45 1.36);
+     }
+     }
+     
+     {
+         name        fWindow;
+         type        faceZoneSet;
+         action      new;
+    
+         source      setToFaceZone;
+         faceSet     fSetWindow;
+     }
+
+);
+// ************************************************************************* //

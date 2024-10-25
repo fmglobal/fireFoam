@@ -1,0 +1,144 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1806                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    "rho.*"
+    {
+        //solver          PCG;
+        solver          diagonal;
+        //preconditioner  DIC;
+        tolerance       1e-6;
+        relTol          0;
+    };
+
+    p_rgh
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-6;
+        relTol          0.01;
+        //
+        //solver          GAMG;
+        //tolerance       1e-6;
+        //relTol          0.01;
+        //smoother        GaussSeidel;
+        //cacheAgglomeration true;
+        //nCellsInCoarsestLevel 20;
+        //agglomerator    faceAreaPair;
+        //mergeLevels     1;
+
+        //processorAgglomerator   masterCoarsest;
+        //nCellsInCoarsestLevel   1;
+        //nMasters                2;
+        //
+    };
+
+    p_rghFinal
+    {
+        $p_rgh;
+        relTol          0.0;
+        //coarsestLevelCorr
+        //{
+        //    solver PCG; // PPCG or PPCR
+        //    preconditioner DIC;
+        //    relTol 0.001;
+        //}
+    };
+
+    ph_rgh
+    {
+        $p_rgh;
+    };
+
+    "U.*"
+    {
+        //solver          smoothSolver;
+        //smoother        symGaussSeidel;
+        solver          PBiCGStab;
+        preconditioner  DILU;
+
+        tolerance       1e-6;
+        relTol          0;
+        maxIter         10;
+    };
+
+    "(Yi|h|k).*"
+    {
+        $U;
+        tolerance       1e-8;
+    };
+
+    "(flm|fmm).*"
+    {
+        $U;
+        tolerance       1e-6;
+    };
+
+    Ii
+    {
+        solver              GAMG;
+        tolerance           1e-4;
+        relTol              0;
+        smoother            DILU;
+        cacheAgglomeration  true;
+        nCellsInCoarsestLevel   10;
+        agglomerator    faceAreaPair;
+        mergeLevels     1;
+        
+        processorAgglomerator   masterCoarsest;
+        nCellsInCoarsestLevel   1;
+        //nMasters                2;
+    };
+
+    //G
+    //{
+    //    solver          PCG;
+    //    preconditioner  DIC;
+    //    tolerance       1e-06;
+    //    relTol          0;
+    //};
+}
+
+
+PIMPLE
+{
+    momentumPredictor yes;
+    nOuterCorrectors  3;
+    nCorrectors       2;
+    nNonOrthogonalCorrectors 0;
+
+    hydrostaticInitialization yes;
+    nHydrostaticCorrectors 5;
+}
+
+
+relaxationFactors
+{
+    fields
+    {
+        ".*"       1;
+    }
+    equations
+    {
+        ".*"       1;
+    }
+}
+
+
+// ************************************************************************* //

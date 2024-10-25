@@ -1,0 +1,71 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.4.x                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      pyrolysisZones;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+pyrolysisBox
+{
+    active              true;
+
+    pyrolysisModel      reactingOneDimFF;
+
+    region              Facade_WallRegion;
+    pyrolysisRegion     Facade_WallRegion;
+
+    reactingOneDimFFCoeffs
+    {
+        gasHSource          no; //Energy source term due to pyrolysis gas
+        qrHSource           no; //Energy source term due in depht radiation
+
+        filmCoupled         true;
+    
+        radFluxName         Qr;
+    
+        moveMesh            false;
+        minimumDelta        1e-6;
+        useChemistrySolvers false;
+        //TcharStart      400;
+        //TcharOxiMax     600;
+    }
+    infoOutput          true;
+}
+
+ChamberBox
+{
+    active              true;
+
+    pyrolysisModel      reactingOneDimFF;
+
+    region              Chamber_WallRegion;
+    pyrolysisRegion     Chamber_WallRegion;
+
+    reactingOneDimFFCoeffs
+    {
+        gasHSource          no; //Energy source term due to pyrolysis gas
+        qrHSource           no; //Energy source term due in depht radiation
+
+        filmCoupled         true;
+    
+        radFluxName         Qr;
+    
+        moveMesh            false;
+        minimumDelta        1e-6;
+        useChemistrySolvers false;
+        //TcharStart      400;
+        //TcharOxiMax     600;
+    }
+    infoOutput          true;
+}
+// ************************************************************************* //

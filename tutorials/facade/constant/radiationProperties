@@ -1,0 +1,57 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  dev                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      radiationProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+radiation       on;
+
+radiationModel  fvDOM;
+
+noRadiation
+{
+}
+
+P1Coeffs
+{
+}
+
+fvDOMCoeffs
+{
+    nPhi    4;          // azimuthal angles in PI/2 on X-Y.(from Y to X)
+    nTheta  4;          // polar angles in PI (from Z to X-Y plane)
+    tolerance 1e-3;   // convergence criteria for radiation iteration
+    maxIter 5;          // maximum number of iterations
+}
+
+// Number of flow iterations per radiation iteration
+solverFreq 50;
+
+absorptionEmissionModel constRadFractionEmission;
+
+constRadFractionEmissionCoeffs
+{
+    EhrrCoeff           0.33;
+    radScaling          false;
+//    Ehrr1               0.4;
+//    Ehrr2               0.22;
+    patch1              (Inlet); //not used since radScaling=false
+    patch2              (region0_to_Facade_WallRegion_Facade_Wall); //not used since radScaling=false
+}
+
+scatterModel    none;
+
+transmissivityModel       none;
+
+// ************************************************************************* //

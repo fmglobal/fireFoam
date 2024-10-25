@@ -1,0 +1,45 @@
+/*----------------------------------------------------------------------------*\
+| **************       ******* | Automatically Generated FOAM File            |
+| ****************   ********* |                                              |
+|             *********** **** | URL: https://dev.azure.com/fmglobal/Research |
+| ***********   *******   **** | Repo: fireFoam.newCaseConfiguration          |
+| ***********     ****    **** | Commit: 3e06c04                              |
+| ****                    **** | Created by: krismana                         |
+| ****                    **** | Created on: 2024 Sep 02                      |
+\*----------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    "0/";
+    object      U;
+}
+
+dimensions		[0 1 -1 0 0 0 0];
+
+internalField	uniform (0 0 0);
+
+boundaryField
+{
+	"(top|sides)"
+	{
+		type	pressureInletOutletVelocity;
+		value	$internalField;
+		inletValue	$internalField;
+	}
+
+	burner
+	{
+		type	flowRateInletVelocity;
+		massFlowRate	0.001159;
+		value	$internalField;
+	}
+
+	"ground.*"
+	{
+		type	noSlip;
+	}
+
+}

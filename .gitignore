@@ -1,0 +1,7 @@
+.devcontainer/
+.vscode/
+lnInclude
+git_version.H
+build/
+OpenFOAM/
+fireFoam/packages/lagrangian/

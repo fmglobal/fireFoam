@@ -1,0 +1,53 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  plus                                  |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      boundaryRadiationProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ground
+{
+    type            lookup;
+    emissivity      1.0;
+    absorptivity    0.0;
+}
+
+outlet
+{
+    type            lookup;
+    emissivity      0.0;
+    absorptivity      1.0;
+}
+
+sideOpen
+{
+    type            lookup;
+    emissivity      0.0;
+    absorptivity      1.0;
+}
+
+burner
+{
+    type            lookup;
+    emissivity      1.0;
+    absorptivity      0.0;
+}
+
+region0_to_solidFuelRegion_solidFuel
+{
+    type            lookup;
+    emissivity      1.0;
+    absorptivity      0.0;
+}
+
+// ************************************************************************* //

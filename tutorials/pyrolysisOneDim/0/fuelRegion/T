@@ -1,0 +1,42 @@
+/*----------------------------------------------------------------------------*\
+| **************       ******* | Automatically Generated FOAM File            |
+| ****************   ********* |                                              |
+|             *********** **** | URL: https://dev.azure.com/fmglobal/Research |
+| ***********   *******   **** | Repo: fireFoam.newCaseConfiguration          |
+| ***********     ****    **** | Commit: 4e942a4                              |
+| ****                    **** | Created by: krismana                         |
+| ****                    **** | Created on: 2024 Sep 02                      |
+\*----------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0/fuelRegion";
+    object      T;
+}
+
+dimensions		[0 0 0 1 0 0 0];
+
+internalField	uniform 298.15;
+
+boundaryField
+{
+	fuel_top
+	{
+		type	constHTemperature;
+		h	uniform	20;
+		value	$internalField;
+		Tinf	$internalField;
+	}
+
+	region0_to_fuelRegion_fuel
+	{
+		type	pyrolysisTemperatureFixedRadiation;
+		qrIncident	uniform	110000.0;
+		kappaMethod	solidThermo;
+		value	$internalField;
+	}
+
+}

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $DIR
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+. $WM_PROJECT_DIR/bin/tools/CleanFunctions
+
+runApplication blockMesh 
+runApplication snappyHexMesh -overwrite 
+runApplication createPatch -overwrite 
+runApplication topoSet
+runApplication -s facade extrudeToRegionMesh -dict system/extrudeToRegionMeshDict.FacadeWall  -overwrite
+runApplication -s chamber extrudeToRegionMesh -dict system/extrudeToRegionMeshDict.ChamberWall  -overwrite
+
+cp 0/ph_rgh.org 0/ph_rgh

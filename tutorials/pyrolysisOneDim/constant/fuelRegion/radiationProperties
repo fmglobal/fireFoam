@@ -1,0 +1,47 @@
+/*----------------------------------------------------------------------------*\
+| **************       ******* | Automatically Generated FOAM File            |
+| ****************   ********* |                                              |
+|             *********** **** | URL: https://dev.azure.com/fmglobal/Research |
+| ***********   *******   **** | Repo: fireFoam.newCaseConfiguration          |
+| ***********     ****    **** | Commit: 4e942a4                              |
+| ****                    **** | Created by: krismana                         |
+| ****                    **** | Created on: 2024 Sep 02                      |
+\*----------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant/fuelRegion";
+    object      radiationProperties;
+}
+
+radiation	yes;
+radiationModel	opaqueSolid;
+absorptionEmissionModel	greyMeanSolidAbsorptionEmissionFF;
+greyMeanSolidAbsorptionEmissionFFCoeffs	{
+		v	{
+			absorptivity	{
+				method	polynomial;
+				fixedTemperature	2998;
+				polynomialCoeffs	(0.686259856 0.000817201578 -1.29586938e-06 7.85543993e-10 -2.59128766e-13 4.6025354e-17 -3.42709246e-21);
+			}
+			emissivity	{
+				method	polynomial;
+				polynomialCoeffs	(1.02062688 -0.000551473374 1.05855411e-06 -1.16723099e-09 5.88924428e-13 -1.40616456e-16 1.30245966e-20);
+			}
+		}
+		char	{
+			absorptivity	{
+				method	fixedValue;
+				fixedValue	1;
+			}
+			emissivity	{
+				method	fixedValue;
+				fixedValue	1;
+			}
+		}
+	}
+scatterModel	none;
+transmissivityModel	none;

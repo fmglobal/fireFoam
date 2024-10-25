@@ -1,0 +1,56 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.4.x                                 |
+|   \\  /    A nd           | Web:      http://www.OpenFOAM.com               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0/pyrolysisRegion";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 298;
+
+boundaryField
+{
+    Chamber_Wall_top
+    {
+        type            zeroGradient;
+        type            constHTemperature;
+        value           uniform 298;
+        Tinf            uniform 298;
+        h               uniform 20.0;
+    }
+
+    region0_to_Chamber_WallRegion_Chamber_Wall
+    {
+        type                compressible::pyrolysisTemperatureCoupled;
+        pyrolysisRegion     Chamber_WallRegion;
+        Tnbr                T;
+        K                   K;
+        kappaMethod         solidThermo;
+        Qr                  Qr;
+        kappaName           none;
+        emissivityMode      solidRadiation;
+        neighbourFieldRadiativeName     qin;
+        //neighbourFieldConvectiveName    QcWallFunction;
+        neighbourFieldConvectiveName    convectiveHeatFlux_T;
+        fieldRadiativeName  none;
+        fieldConvectiveName none;
+        value               $internalField;
+    }
+
+    oneDEmptyPatch
+    {
+	type            empty;
+    }
+}
+// ************************************************************************* //

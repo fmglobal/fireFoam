@@ -1,0 +1,29 @@
+/*----------------------------------------------------------------------------*\
+| **************       ******* | Automatically Generated FOAM File            |
+| ****************   ********* |                                              |
+|             *********** **** | URL: https://dev.azure.com/fmglobal/Research |
+| ***********   *******   **** | Repo: fireFoam.newCaseConfiguration          |
+| ***********     ****    **** | Commit: 4e942a4                              |
+| ****                    **** | Created by: krismana                         |
+| ****                    **** | Created on: 2024 Sep 02                      |
+\*----------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant/fuelRegion";
+    object      chemistryProperties;
+}
+
+chemistry	yes;
+chemistryType	{
+		chemistrySolver	ode;
+		chemistryThermo	pyrolysis;
+	}
+initialChemicalTimeStep	1e-07;
+odeCoeffs	{
+		solver	SIBS;
+		eps	0.05;
+	}

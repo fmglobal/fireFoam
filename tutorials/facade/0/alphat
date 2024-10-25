@@ -1,0 +1,80 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  dev                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      alphat;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [1 -1 -1 0 0 0 0];
+
+internalField   uniform 0;
+
+boundaryField
+{
+    Sides_air
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField; //zeroGradient;
+    }
+
+    Outlet
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField; //zeroGradient;
+    }
+
+    Base
+    {
+        type            zeroGradient; //fixedValue;
+        //value           uniform 0;
+    }
+
+    Inlet
+    {
+        type            fixedValue;
+        value           uniform 0;
+    }
+    
+    region0_to_Facade_WallRegion_Facade_Wall
+    {
+        type    alphatPyrolysisMeshCorrected;
+        phiName                 phi;         
+        m60                     0.008;
+        Prt                     1.0;
+        fuelConversionRatio     1.0;
+        C1                      175;  // replaces Cdelta1
+        C2                      800;      // replaces Cdelta2
+        LR                      0.0015; // replaces deltaMin and delta1
+        LB                      0.0045; // equals old delta1-delta2, 
+        value                   uniform 0;
+    }
+    
+    region0_to_Chamber_WallRegion_Chamber_Wall
+    {
+        type    alphatPyrolysisMeshCorrected;
+        phiName                 phi;         
+        m60                     0.008;
+        Prt                     1.0;
+        fuelConversionRatio     1.0;
+        C1                      175;  // replaces Cdelta1
+        C2                      800;      // replaces Cdelta2
+        LR                      0.0015; // replaces deltaMin and delta1
+        LB                      0.0045; // equals old delta1-delta2, 
+        value                   uniform 0;
+    }
+}
+
+
+// ************************************************************************* //

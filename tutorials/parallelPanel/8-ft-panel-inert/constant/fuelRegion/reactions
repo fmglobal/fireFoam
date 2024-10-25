@@ -1,0 +1,22 @@
+species
+(
+    inert
+);
+
+gaseousSpecies
+(
+    dummy
+);
+
+reactions
+{
+    charReaction
+    {
+        type        irreversibleArrheniusSolidReaction;
+        reaction    "inert = inert";
+        A           0.0;
+        Ta          1.0e10;
+        Tcrit       1.0e10; 
+    }
+}
+

@@ -1,0 +1,26 @@
+/*----------------------------------------------------------------------------*\
+| **************       ******* | Automatically Generated FOAM File            |
+| ****************   ********* |                                              |
+|             *********** **** | URL: https://dev.azure.com/fmglobal/Research |
+| ***********   *******   **** | Repo: fireFoam.newCaseConfiguration          |
+| ***********     ****    **** | Commit: 4e942a4                              |
+| ****                    **** | Created by: krismana                         |
+| ****                    **** | Created on: 2024 Sep 02                      |
+\*----------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant/";
+    object      reactions;
+}
+
+species	(CH4 O2 N2 CO2 H2O);
+reactions	{
+		methaneReaction	{
+			type	irreversibleinfiniteReaction;
+			reaction	"CH4 + 2O2 + 7.52N2 = CO2 + 2H2O + 7.52N2";
+		}
+	}

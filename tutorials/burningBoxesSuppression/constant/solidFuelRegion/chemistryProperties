@@ -1,0 +1,77 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.7.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    class       dictionary;
+    location    "constant";
+    object      chemistryProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+chemistryType
+{
+    chemistrySolver   ode;
+    chemistryThermo   pyrolysis;
+}
+
+chemistry           on;
+
+initialChemicalTimeStep 1e-07;
+
+odeCoeffs
+{
+    solver          SIBS;
+    eps             0.05;
+}
+
+
+
+/*
+species
+(
+    gas 
+);
+
+reactions    //properties of single-wall corrugated
+(
+    irreversibleSolidArrheniusReaction
+    v  = gas + char
+    (3.238963e+10 15725.35963 400 1.2579892)
+    //(1.49191e+16 23867.59682 400 1.7463213)
+    //(1.72982e+12 18348.56868 400 3.3928)
+    //(9.7499e+24 35817.89752 400 4.6158)
+    //(3.4683e+19 30058.252 400 3.736)
+    //(7.83e10 15274.57 400 4.86)
+);
+
+gas
+{
+    specie
+    {
+        nMoles          1;
+        molWeight       18.0153;
+    }
+    thermodynamics
+    {
+        Tlow            200;
+        Thigh           5000;
+        Tcommon         1000;
+        highCpCoeffs    ( 2.67215 0.00305629 -8.73026e-07 1.20100e-10 -6.39162e-15 -29899.2 6.86282 );
+        lowCpCoeffs     ( 3.38684 0.00347498 -6.35470e-06 6.96858e-09 -2.50659e-12 -30208.1 2.59023 );
+    }
+    transport
+    {
+        As              1.67212e-06;
+        Ts              170.672;
+    }
+}
+*/
+
+// ************************************************************************* //

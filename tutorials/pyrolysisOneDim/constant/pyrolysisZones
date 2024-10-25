@@ -1,0 +1,38 @@
+/*----------------------------------------------------------------------------*\
+| **************       ******* | Automatically Generated FOAM File            |
+| ****************   ********* |                                              |
+|             *********** **** | URL: https://dev.azure.com/fmglobal/Research |
+| ***********   *******   **** | Repo: fireFoam.newCaseConfiguration          |
+| ***********     ****    **** | Commit: 4e942a4                              |
+| ****                    **** | Created by: krismana                         |
+| ****                    **** | Created on: 2024 Sep 02                      |
+\*----------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant/";
+    object      pyrolysisZones;
+}
+
+fuel
+{
+	active	yes;
+	pyrolysisModel	reactingOneDimFF;
+	region	fuelRegion;
+	pyrolysisRegion	fuelRegion;
+	infoOutput	yes;
+	reactingOneDimFFCoeffs	{
+		gasHSource	no;
+		qrHSource	no;
+		radFluxName	Qr;
+		moveMesh	no;
+		minimumDelta	1e-06;
+		filmCoupled	no;
+		useChemistrySolvers	false;
+		thickness	0.02286;
+	}
+}
+

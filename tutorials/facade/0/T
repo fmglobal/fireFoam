@@ -1,0 +1,84 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  dev                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 298.15;
+
+boundaryField
+{
+    Outlet
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+
+    Sides_air
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+    
+    Base
+    {
+        type            fixedValue;
+        value           $internalField; //zeroGradient;
+    }
+ 
+    Inlet
+    {
+        type            fixedValue;
+        value           $internalField; //fixedEnthalpyFluxTemperature;
+    }
+    
+    region0_to_Facade_WallRegion_Facade_Wall
+    {
+        type            compressible::pyrolysisTemperatureCoupled;
+        Tnbr                T;
+        pyrolysisRegion     Facade_WallRegion;
+        K                   none;
+        kappaMethod         fluidThermo;
+        kappaName           none;
+        emissivityMode      solidRadiation;
+        neighbourFieldRadiativeName     none;
+        neighbourFieldConvectiveName    none;
+        fieldRadiativeName  qin; //Qr;
+        fieldConvectiveName none;
+        value               $internalField;
+    }
+    
+    region0_to_Chamber_WallRegion_Chamber_Wall
+    {
+        type            compressible::pyrolysisTemperatureCoupled;
+        Tnbr                T;
+        pyrolysisRegion     Chamber_WallRegion;
+        K                   none;
+        kappaMethod         fluidThermo;
+        kappaName           none;
+        emissivityMode      solidRadiation;
+        neighbourFieldRadiativeName     none;
+        neighbourFieldConvectiveName    none;
+        fieldRadiativeName  qin; //Qr;
+        fieldConvectiveName none;
+        value               $internalField;
+    }
+}
+
+
+// ************************************************************************* //

@@ -1,0 +1,30 @@
+/*----------------------------------------------------------------------------*\
+| **************       ******* | Automatically Generated FOAM File            |
+| ****************   ********* |                                              |
+|             *********** **** | URL: https://dev.azure.com/fmglobal/Research |
+| ***********   *******   **** | Repo: fireFoam.newCaseConfiguration          |
+| ***********     ****    **** | Commit: 4e942a4                              |
+| ****                    **** | Created by: krismana                         |
+| ****                    **** | Created on: 2024 Sep 02                      |
+\*----------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant/fuelRegion";
+    object      reactions;
+}
+
+species	(v char);
+gaseousSpecies	(gas);
+reactions	{
+		charReaction	{
+			type	irreversibleArrheniusSolidReaction;
+			reaction	"v^1.2579892 = char + gas";
+			A	31620000000.0;
+			Ta	15725.35963;
+			Tcrit	400;
+		}
+	}

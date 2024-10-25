@@ -1,0 +1,7 @@
+add_subdirectory(thermophysicalModels/combustionModels)
+add_subdirectory(thermophysicalModels/radiation/derivedFvPatchFields)
+add_subdirectory(thermophysicalModels/radiation/submodels/absorptionEmissionModel)
+add_subdirectory(fvPatchFields)
+add_subdirectory(fvPatchFieldsPyrolysis)
+add_subdirectory(regionCoupling)
+add_subdirectory(regionModels/pyrolysisModels)

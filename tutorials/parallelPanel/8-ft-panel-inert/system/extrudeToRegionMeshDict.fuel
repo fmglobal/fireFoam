@@ -1,0 +1,43 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.4.x                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      extrudeToRegionMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+region          fuelRegion;
+
+faceZones       (fuel);
+
+oneD            true;
+
+sampleMode      nearestPatchFace;
+
+extrudeModel    linearNormal;
+
+oneDPolyPatchType empty; //emptyPolyPatch; //wedgePolyPatch
+
+nLayers         100;
+
+expansionRatio  1;
+
+adaptMesh       true; // directMapped for both
+
+linearNormalCoeffs
+{
+    _tmp_
+    {
+        #include "<constant>/pyrolysisZones"
+    }
+    thickness       ${_tmp_/pyrolysisBox/reactingOneDimFFCoeffs/thickness};
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

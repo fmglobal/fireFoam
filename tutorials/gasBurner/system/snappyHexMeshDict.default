@@ -1,0 +1,106 @@
+/*----------------------------------------------------------------------------*\
+| **************       ******* | Automatically Generated FOAM File            |
+| ****************   ********* |                                              |
+|             *********** **** | URL: https://dev.azure.com/fmglobal/Research |
+| ***********   *******   **** | Repo: fireFoam.newCaseConfiguration          |
+| ***********     ****    **** | Commit: 3e06c04                              |
+| ****                    **** | Created by: krismana                         |
+| ****                    **** | Created on: 2024 Sep 02                      |
+\*----------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "";
+    object      snappyHexMeshDict;
+}
+
+// Controls
+castellatedMesh	yes;
+
+snap	no;
+
+addLayers	no;
+
+debug	0;
+
+mergeTolerance	1e-06;
+
+
+geometry
+{
+	groundInletRefinement	{
+		type	searchableBox;
+		min	(-0.18 -0.18 0);
+		max	(0.18 0.18 0);
+	}
+}
+
+castellatedMeshControls
+{
+	maxLocalCells	5000000;
+	maxGlobalCells	10000000;
+	minRefinementCells	0;
+	nCellsBetweenLevels	1;
+	features	();
+	refinementRegions	{
+	}
+	refinementSurfaces	{
+		groundInletRefinement	{
+			level	(0 0);
+		}
+	}
+	resolveFeatureAngle	60;
+	locationInMesh	(0 1.0 0);
+	allowFreeStandingZoneFaces	yes;
+}
+
+snapControls
+{
+	nSmoothPatch	3;
+	tolerance	4.0;
+	nSolveIter	30;
+	nRelaxIter	5;
+}
+
+addLayersControls
+{
+	relativeSizes	yes;
+	finalLayerThickness	0.3;
+	layers	None;
+	expansionRatio	1.0;
+	finalLayerRatio	0.5;
+	minThickness	0.25;
+	nGrow	0;
+	featureAngle	60;
+	nRelaxIter	5;
+	nSmoothSurfaceNormals	1;
+	nSmoothNormals	3;
+	nSmoothThickness	10;
+	maxThicknessToMedialRatio	0.3;
+	minMedianAxisAngle	130;
+	nBufferCellsNoExtrude	0;
+	nLayerIter	50;
+}
+
+meshQualityControls
+{
+	maxNonOrtho	45;
+	maxBoundarySkewness	20;
+	maxInternalSkewness	4;
+	maxConcave	80;
+	minFlatness	0.5;
+	minVol	1e-10;
+	minArea	1e-07;
+	minTetQuality	1e-30;
+	minTwist	0.05;
+	minDeterminant	0.1;
+	minFaceWeight	0.05;
+	minVolRatio	0.01;
+	minTriangleTwist	-1;
+	nSmoothScale	4;
+	errorReduction	0.75;
+}
+

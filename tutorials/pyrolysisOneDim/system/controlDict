@@ -1,0 +1,144 @@
+/*----------------------------------------------------------------------------*\
+| **************       ******* | Automatically Generated FOAM File            |
+| ****************   ********* |                                              |
+|             *********** **** | URL: https://dev.azure.com/fmglobal/Research |
+| ***********   *******   **** | Repo: fireFoam.newCaseConfiguration          |
+| ***********     ****    **** | Commit: 4e942a4                              |
+| ****                    **** | Created by: krismana                         |
+| ****                    **** | Created on: 2024 Sep 02                      |
+\*----------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+
+application	fireFoam;
+
+startFrom	startTime;
+
+startTime	0;
+
+stopAt	endTime;
+
+endTime	300;
+
+deltaT	0.001;
+
+writeControl	adjustableRunTime;
+
+writeInterval	20;
+
+purgeWrite	0;
+
+writeFormat	binary;
+
+timeFormat	general;
+
+timePrecision	6;
+
+runTimeModifiable	yes;
+
+adjustTimeStep	yes;
+
+maxCo	0.9;
+
+maxDeltaT	1;
+
+maxDi	0.9;
+
+logPrecision 6;
+
+logTime 1;
+
+functions
+{
+    pyrolysis-mlr-sum // mass loss rate from pyrolysis region
+    {
+        type                surfaceFieldValue;
+        libs                (fieldFunctionObjects);
+        enabled             true;
+        writeControl        adjustableRunTime;
+        writeInterval       $...logTime;
+        writePrecision      $...logPrecision;
+        log                 false;
+        updateHeader        false;
+        writeFields         false;
+        region              fuelRegion;
+        regionType          patch;
+        name                region0_to_fuelRegion_fuel;
+        operation           sum;
+        fields
+        (
+            phiGas
+        );
+    }
+
+    pyrolysis-temperature-front // Front surface pyrolysis temperature
+    {
+        type                surfaceFieldValue;
+        libs                (fieldFunctionObjects);
+        enabled             true;
+        writeControl        adjustableRunTime;
+        writePrecision      $...logPrecision;
+        writeInterval       $...logTime;
+        log                 false;
+        updateHeader        false;
+        writeFields         false;
+        region              fuelRegion;
+        regionType          patch;
+        name                region0_to_fuelRegion_fuel;
+        operation           max;
+        fields
+        (
+            T
+        );
+    }
+
+    pyrolysis-temperature-back // Back surface pyrolysis temperature
+    {
+        type                surfaceFieldValue;
+        libs                (fieldFunctionObjects);
+        enabled             true;
+        writeControl        adjustableRunTime;
+        writePrecision      $...logPrecision;
+        writeInterval       $...logTime;
+        log                 false;
+        updateHeader        false;
+        writeFields         false;
+        region              fuelRegion;
+        regionType          patch;
+        name                fuel_top; 
+        operation           max;
+        fields
+        (
+            T
+        );
+    }
+
+    pyrolysis-mass-sum
+    {
+        type                volFieldValue;
+        libs                (fieldFunctionObjects);
+        enabled             true;
+        writeControl        adjustableRunTime;
+        writePrecision      $...logPrecision;
+        writeInterval       $...logTime;
+        log                 false;
+        updateHeader        false;
+        writeFields         false;
+        region              fuelRegion;
+        regionType          all;
+        //name                ;
+        operation           volIntegrate;
+        fields
+        (
+            rho
+        );
+    }
+}
+

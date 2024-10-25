@@ -1,0 +1,69 @@
+/*----------------------------------------------------------------------------*\
+| **************       ******* | Automatically Generated FOAM File            |
+| ****************   ********* |                                              |
+|             *********** **** | URL: https://dev.azure.com/fmglobal/Research |
+| ***********   *******   **** | Repo: fireFoam.newCaseConfiguration          |
+| ***********     ****    **** | Commit: 4e942a4                              |
+| ****                    **** | Created by: krismana                         |
+| ****                    **** | Created on: 2024 Sep 02                      |
+\*----------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      blockMeshDict;
+}
+
+scale	1;
+
+vertices
+(
+	(-0.5 -0.5 0)
+	(0.5 -0.5 0)
+	(0.5 0.5 0)
+	(-0.5 0.5 0)
+	(-0.5 -0.5 1)
+	(0.5 -0.5 1)
+	(0.5 0.5 1)
+	(-0.5 0.5 1)
+);
+blocks
+(
+	hex (0 1 2 3 4 5 6 7) (1 1 1) simpleGrading (1 1 1)
+);
+edges
+(
+);
+boundary
+(
+	sides
+	{
+		type patch;
+		faces
+		(
+			(0 4 7 3)
+			(2 6 5 1)
+			(3 7 6 2)
+			(1 5 4 0)
+		);
+	}
+	top
+	{
+		type patch;
+		faces
+		(
+			(4 5 6 7)
+		);
+	}
+	ground
+	{
+		type wall;
+		faces
+		(
+			(0 3 2 1)
+		);
+	}
+);

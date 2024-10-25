@@ -1,0 +1,180 @@
+/*----------------------------------------------------------------------------*\
+| **************       ******* | Automatically Generated FOAM File            |
+| ****************   ********* |                                              |
+|             *********** **** | URL: https://dev.azure.com/fmglobal/Research |
+| ***********   *******   **** | Repo: fireFoam.newCaseConfiguration          |
+| ***********     ****    **** | Commit: 3e06c04                              |
+| ****                    **** | Created by: krismana                         |
+| ****                    **** | Created on: 2024 Sep 02                      |
+\*----------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+
+application	fireFoam;
+
+startFrom	startTime;
+
+startTime	0;
+
+stopAt	endTime;
+
+endTime	60;
+
+deltaT	0.001;
+
+writeControl	adjustableRunTime;
+
+writeInterval	5;
+
+purgeWrite	0;
+
+writeFormat	binary;
+
+timeFormat	general;
+
+timePrecision	6;
+
+runTimeModifiable	yes;
+
+adjustTimeStep	yes;
+
+maxCo	0.9;
+
+maxDeltaT	0.01;
+
+logTime 1;
+
+vtkTime 1;
+
+functions
+{
+    heat-release-rate
+    {
+        type            volFieldValue;
+        libs (fieldFunctionObjects);
+        enabled         true;
+        writeControl    adjustableRunTime; 
+        writeInterval   $...logTime;
+        udateHeader     false;
+        log             false;     
+        writeFields     false;
+        regionType      all; 
+        name            c0;
+        operation       volIntegrate; 
+        fields
+        (
+            Qdot
+        );
+    }
+
+    moving-averages
+    {
+        type            fieldAverage;
+        libs (fieldFunctionObjects);
+        enabled         true;
+        resetOnOutput   no;
+        resetOnRestart  no;
+        timeStart       0;
+        timeEnd         $...endTime;
+        writeControl    writeTime;
+        fields
+        (
+            U
+            {
+                mean        on;
+                prime2Mean  off;
+                base        time;
+                window      5.0;
+                windowName  MA;
+                windowType  approximate;
+            }
+            T
+            {
+                mean        on;
+                prime2Mean  off;
+                base        time;
+                window      5.0;
+                windowName  MA;
+                windowType  approximate;
+            }
+        );
+    }
+
+    plane-samples
+    {
+        type surfaces;
+        libs  (libsampling);
+        enabled             true;
+        writeControl        adjustableRunTime;
+        writeInterval       $...vtkTime;
+        interpolationScheme cellPoint;
+        surfaceFormat       vtk;
+
+        formatOptions
+        {
+            vtk
+            {
+                format    binary;
+            }
+        }
+
+        // Fields to be sampled
+        fields
+        (
+            T
+            U
+            UMean_MA
+            TMean_MA
+        );
+
+        surfaces
+        (
+            verticalPlaneY
+            {
+                type cuttingPlane;
+                planeType pointAndNormal;
+                pointAndNormalDict
+                {
+                    point       (0 0 1);
+                    normal    (0 1 0);
+                }
+                interpolate     true;
+            }
+        );
+    }
+
+    iso-surfaces 
+    {
+        type surfaces;
+        functionObjectLibs ("libsampling.so");
+        enabled         true;
+        writeControl   adjustableRunTime;
+        writeInterval   $...vtkTime;
+        interpolationScheme cellPoint;
+        surfaceFormat vtk;
+        
+        fields
+        (
+                T
+        );
+        surfaces
+        (
+                flame
+                {
+                    type            isoSurfaceTopo;
+                    isoField        ft; // Mixture fraction
+                    isoValue        0.06; // Near-stoichiometry (flame sheet)
+                    interpolate     true;
+                }
+        );
+    }
+
+}
+

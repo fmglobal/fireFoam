@@ -1,0 +1,5 @@
+- One dimensional pyrolysis configuration based on FPA configuration, e.g., DOI: 10.3801/IAFSS.FSS.11-165
+- Gas-phase solution de-acativated
+- Heat flux imposed at solid-gas interface in 0/fuelRegion/T BC
+- Sample thickness set in system/extrudeToRegionMeshDic.fuelRegion and constant/pyrolysisZones
+- runtime post-processing provides mass, mlr, and surface temperature traces

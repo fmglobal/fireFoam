@@ -1,0 +1,114 @@
+/*----------------------------------------------------------------------------*\
+| **************       ******* | Automatically Generated FOAM File            |
+| ****************   ********* |                                              |
+|             *********** **** | URL: https://dev.azure.com/fmglobal/Research |
+| ***********   *******   **** | Repo: fireFoam.newCaseConfiguration          |
+| ***********     ****    **** | Commit: 3e06c04                              |
+| ****                    **** | Created by: krismana                         |
+| ****                    **** | Created on: 2024 Sep 02                      |
+\*----------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system/";
+    object      fvSolution;
+}
+
+solvers
+{
+	"rho.*"
+	{
+		solver	PCG;
+		preconditioner	DIC;
+		tolerance	1e-06;
+		relTol	0;
+	}
+
+	"(p_rgh|ph_rgh)"
+	{
+		solver	PCG;
+		preconditioner	DIC;
+		tolerance	1e-06;
+		relTol	0.01;
+	}
+
+	p_rghFinal
+	{
+		solver	PCG;
+		preconditioner	DIC;
+		tolerance	1e-06;
+		relTol	0;
+	}
+
+	"(U|flm|fmm)"
+	{
+		solver	smoothSolver;
+		smoother	symGaussSeidel;
+		tolerance	1e-06;
+		relTol	0;
+		maxIter	10;
+	}
+
+	UFinal
+	{
+		solver	smoothSolver;
+		smoother	symGaussSeidel;
+		tolerance	1e-06;
+		relTol	1e-08;
+		maxIter	10;
+	}
+
+	"(Yi|h|k).*"
+	{
+		solver	smoothSolver;
+		smoother	symGaussSeidel;
+		tolerance	1e-08;
+		relTol	0;
+		maxIter	10;
+	}
+
+	Ii
+	{
+		solver	GAMG;
+		tolerance	0.0001;
+		relTol	0;
+		smoother	DILU;
+		cacheAgglomeration	yes;
+		nCellsInCoarsestLevel	10;
+		agglomerator	faceAreaPair;
+		mergeLevels	1;
+	}
+
+	G
+	{
+		solver	PCG;
+		preconditioner	DIC;
+		tolerance	1e-06;
+		relTol	0;
+	}
+
+}
+
+PIMPLE
+{
+	momentumPredictor	yes;
+	nOuterCorrectors	3;
+	nCorrectors	2;
+	nNonOrthogonalCorrectors	0;
+	hydrostaticInitialization	yes;
+	nHydrostaticCorrectors	5;
+	residualControl	{
+		U	{
+			tolerance	1e-05;
+			relTol	0;
+		}
+		p	{
+			tolerance	0.0005;
+			relTol	0;
+		}
+	}
+}
+

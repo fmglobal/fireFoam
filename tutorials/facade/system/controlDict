@@ -1,0 +1,205 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  dev                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     fireFoam;
+
+startFrom       startTime;
+
+startTime       0.0;
+
+stopAt          endTime;
+
+endTime         300.0;
+
+deltaT          1e-4;
+
+writeControl    adjustableRunTime;
+
+writeInterval   5.0;
+
+purgeWrite      10;
+
+writeFormat     binary;
+
+writePrecision  8;
+
+compression off;
+
+timeFormat      general;
+
+timePrecision   7;
+
+graphFormat     raw;
+
+runTimeModifiable yes;
+
+adjustTimeStep  yes;
+
+maxCo           0.9;
+
+maxDi           0.25;
+
+maxDeltaT       0.05;
+
+vtkInterval 5;
+traceInterval 0.1;
+
+functions
+{
+
+    flame_Smoke
+    {
+        type surfaces;
+        libs ("sampling");
+        enabled         false;
+        writeControl    adjustableRunTime;
+        writeInterval   $...vtkInterval;
+        interpolationScheme cellPoint;
+        surfaceFormat vtk;
+        fields
+        (
+                T
+        );
+        surfaces
+        (
+                flame
+                {
+                    type            isoSurfaceCell;
+                    isoField        ft;
+                    isoValue        0.06;
+                    interpolate     true;
+                    regularise      true ;
+                }
+                smoke
+                {
+                    type            isoSurfaceCell;
+                    isoField        CO2;
+                    isoValue        0.01;
+                    interpolate     true;
+                    regularise      true;
+                }
+        );
+    }
+	
+    HRR
+    {
+        type            volFieldValue;
+        libs ("fieldFunctionObjects");
+        enabled         true;
+        writeControl    adjustableRunTime;  
+        writeInterval   $...traceInterval;
+        log             false;     
+        writeFields     false;
+        regionType      all;       
+        name            c0;
+        operation       volIntegrate;
+        fields
+        (
+            Qdot
+            Qdot_rad
+        );
+    }
+
+    planes
+    {
+        type surfaces;
+
+        libs  ("sampling");
+        enabled             true;
+        writeControl        adjustableRunTime;
+        writeInterval   $...vtkInterval; 
+        interpolationScheme cellPoint;
+        surfaceFormat       vtk;
+
+        formatOptions
+        {
+            vtk
+            {
+                format    binary;
+            }
+        }
+
+        fields
+        (
+            T
+            U
+            ft
+            Qdot
+            Qdot_rad
+            C3H8
+            O2
+        );
+
+        surfaces
+        (
+           
+           verticalPlaneY
+            {
+                type cuttingPlane;
+                planeType pointAndNormal;
+                pointAndNormalDict
+                {
+                    point       (0 0.01 0);
+                    normal    (0 1 0);
+                }
+                interpolate     true;
+            }
+           
+ 
+        );            
+    }
+
+    heatFlux
+    {
+        type surfaces;
+        libs ("sampling");
+        enabled         true;
+        writeControl   adjustableRunTime;
+        writeInterval   $...vtkInterval;
+        interpolationScheme cellPoint;
+        surfaceFormat vtk;
+        region      region0;
+
+
+       // Fields to be sampled
+        fields
+        (
+            qr
+            qrMean
+            qin
+            qinMean
+            convectiveHeatFlux_L
+            convectiveHeatFlux_LMean
+            convectiveHeatFlux_T
+            convectiveHeatFlux_TMean
+            T
+            TMean
+        );
+        surfaces
+        (
+            panelSurface
+            {
+                type            patch;
+                patches         (
+                                    region0_to_Facade_WallRegion_Facade_Wall
+                                );
+            }
+        );
+    }
+ }
+
+// ************************************************************************* //

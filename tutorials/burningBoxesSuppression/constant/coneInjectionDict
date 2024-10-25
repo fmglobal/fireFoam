@@ -1,0 +1,32 @@
+coneInjection
+{
+    type coneInjection;
+    SOI             30.000;
+    duration        150.000;
+    positionAxis
+    (
+        (( 0.0  0.0  3.0)  ( 0 0 -1 ))  //-No. 0
+    );
+
+    massTotal    30.0; // kg over 100 s;
+
+    parcelsPerInjector 3e6;
+    parcelBasisType mass;
+    flowRateProfile  constant 1;
+    Umag            constant 4.0;
+    thetaInner      constant  0;
+    thetaOuter      constant 60;
+
+    sizeDistribution
+    {
+        type         uniform;
+        uniformDistribution
+        {
+            minValue        0.001;
+            maxValue        0.002;
+            d               ( 7.5e-04 );
+            n               ( 0.5 );
+        }
+    }
+}
+

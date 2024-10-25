@@ -1,0 +1,62 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.2.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    class       dictionary;
+    location    "constant";
+    object      thermo.solid;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+v
+{
+    specie
+    {
+        nMoles      1;
+        molWeight   100;      //?? how this is used?
+    }
+    transport
+    {
+        kappa       0.2; //0.42234479;
+    }
+    thermodynamics
+    {
+        Cp          1050; //2696.6783;
+        Hf          -2.5417e+05; //how this is used?
+    }
+    equationOfState
+    {
+        rho         128; //183.7;
+    }
+};
+
+char
+{
+    specie
+    {
+        nMoles      1;
+        molWeight   50;    //??
+    }
+    transport
+    {
+        kappa       0.32792617;
+    }
+    thermodynamics
+    {
+        Cp          1450;
+        Hf          0; //? zero
+    }
+    equationOfState
+    {
+        rho         23.637243;
+    }
+};
+
+// ************************************************************************* //

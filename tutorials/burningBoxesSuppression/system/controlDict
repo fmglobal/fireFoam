@@ -1,0 +1,237 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1806                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     fireFoam;
+
+startFrom       startTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         60;
+
+deltaT          1e-4;
+
+writeControl    adjustableRunTime;
+
+writeInterval   20;
+
+purgeWrite      50;
+
+writeFormat     ascii;
+
+writePrecision  6;
+
+writeCompression no;
+
+timeFormat      general;
+
+timePrecision   8;
+
+graphFormat     raw;
+
+runTimeModifiable yes;
+
+adjustTimeStep  yes;
+
+maxCo           2.0;
+
+maxDi           0.25;
+
+maxDeltaT       0.005;
+
+libs
+(
+);
+
+functions
+{
+    HRR
+    {
+        type            volFieldValue;
+        libs ("libfieldFunctionObjects.so");
+        enabled         true;
+        writeControl    timeStep;  //outputTime;
+        writeInterval   50;
+        log             false;     
+        writeFields     false;
+        regionType      all;       //cellZone;
+        name            c0;
+        operation       volIntegrate; 
+        fields
+        (
+            Qdot
+            Qdot_rad
+        );
+    }
+
+    patchPanel
+    {
+        type            surfaceFieldValue;
+        libs ("libfieldFunctionObjects.so");
+        enabled         true;
+        writeControl    timeStep;  //outputTime;
+        writeInterval   50;
+        log             false;     
+        writeFields     false;
+        regionType      patch;       //cellZone;
+        name            region0_to_solidFuelRegion_solidFuel;
+        operation       sum;
+        fields
+        (
+            phi
+            HRR_fu
+        );
+    }
+
+    patchPanelQr
+    {
+        type            surfaceFieldValue;
+        libs ("libfieldFunctionObjects.so");
+        enabled         true;
+        writeControl    timeStep;  //outputTime;
+        writeInterval   50;
+        log             false;     
+        writeFields     false;
+        regionType      patch;       //cellZone;
+        name            region0_to_solidFuelRegion_solidFuel;
+        operation       areaIntegrate;
+        fields
+        (
+            qr
+            qin
+            qem
+            convectiveHeatFlux_T
+        );
+    }
+
+    fieldAverage1
+    {
+        type            fieldAverage;
+        libs ( "libfieldFunctionObjects.so" );
+        enabled         true;
+        resetOnOutput   yes;
+        resetOnRestart  true;
+        timeStart       0;
+        timeEnd         $...endTime;
+        writeControl    writeTime;
+        fields
+        (
+            convectiveHeatFlux_T
+            {
+                mean        on;
+                prime2Mean  off;
+                base        time;
+                window      5.0;
+                windowName  MA;
+                windowType  approximate;
+            }
+            qin
+            {
+                mean        on;
+                prime2Mean  off;
+                base        time;
+                window      5.0;
+                windowName  MA;
+                windowType  approximate;
+            }
+            U
+            {
+                mean        on;
+                prime2Mean  off;
+                base        time;
+                window      5.0;
+                windowName  MA;
+                windowType  approximate;
+            }
+            T
+            {
+                mean        on;
+                prime2Mean  off;
+                base        time;
+                window      5.0;
+                windowName  MA;
+                windowType  approximate;
+            }
+        );
+    }
+
+    vtkflame
+    {
+        type surfaces;
+        libs ("libsampling.so");
+        enabled         true;
+        writeControl   adjustableRunTime;
+        writeInterval   5;
+        interpolationScheme cellPoint;
+        surfaceFormat vtk;
+
+        // Fields to be sampled
+        fields
+        (
+        );
+        surfaces
+        (
+                flame_ft_1
+                {
+                    type            isoSurfaceCell;
+                    isoField        ft;
+                    isoValue        0.064;
+                    interpolate     true;
+                }
+                flame_ft_2
+                {
+                    type            isoSurfaceCell;
+                    isoField        ft;
+                    isoValue        0.032;
+                    interpolate     true;
+                }
+        );
+    }
+    vtkFilm
+    {
+        type surfaces;
+
+        libs ("libsampling.so");
+        enabled         true;
+        writeControl   adjustableRunTime;
+        writeInterval   5;
+        interpolationScheme cellPoint;
+        surfaceFormat   vtk;
+        region          filmRegion;
+
+        // Fields to be sampled
+        fields
+        (
+            deltaf
+        );
+
+        surfaces
+        (
+            film
+            {
+                type            patch;
+                patches         (
+                                        region0_to_filmRegion_solidFuel
+                                );
+            }
+        );
+    }
+}
+
+// ************************************************************************* //

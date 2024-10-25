@@ -1,0 +1,4 @@
+#pragma once
+
+#define BUILD_GIT_REVISION "@_build_version@"
+#define BUILD_TIME_STAMP "@_time_stamp@"

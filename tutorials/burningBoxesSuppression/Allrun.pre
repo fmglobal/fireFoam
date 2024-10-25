@@ -1,0 +1,33 @@
+#!/bin/bash
+
+cd ${0%/*} || exit 1    # run from this directory
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+. $WM_PROJECT_DIR/bin/tools/CleanFunctions
+
+./Allclean
+
+runApplication blockMesh
+
+cp system/decomposeParDict.snappy system/decomposeParDict
+
+runApplication snappyHexMesh -overwrite
+
+runApplication -s burner topoSet -dict system/topoSetDict.burner
+
+runApplication createPatch -overwrite
+
+runApplication -s pyrolysis topoSet -dict system/topoSetDict.pyrolysis
+
+transformPoints -scale '(0.0254 0.0254 0.0254)'
+
+runApplication -s film extrudeToRegionMesh -overwrite -dict system/extrudeToRegionMeshDict.film
+
+sed -i 's/samplePatch     region0_to_filmRegion_solidFuel;/samplePatch     region0_to_solidFuelRegion_solidFuel;/g' constant/filmRegion/polyMesh/boundary
+
+runApplication -s solidFuel extrudeToRegionMesh -overwrite -dict system/extrudeToRegionMeshDict.solidFuel
+
+cp 0/ph_rgh.orig 0/ph_rgh
+
+exit;

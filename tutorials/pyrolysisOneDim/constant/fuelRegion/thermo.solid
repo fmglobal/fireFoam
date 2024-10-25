@@ -1,0 +1,51 @@
+/*----------------------------------------------------------------------------*\
+| **************       ******* | Automatically Generated FOAM File            |
+| ****************   ********* |                                              |
+|             *********** **** | URL: https://dev.azure.com/fmglobal/Research |
+| ***********   *******   **** | Repo: fireFoam.newCaseConfiguration          |
+| ***********     ****    **** | Commit: 4e942a4                              |
+| ****                    **** | Created by: krismana                         |
+| ****                    **** | Created on: 2024 Sep 02                      |
+\*----------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant/fuelRegion";
+    object      thermo.solid;
+}
+
+v	{
+		specie	{
+			nMoles	1;
+			molWeight	100;
+		}
+		transport	{
+			kappa	0.422;
+		}
+		thermodynamics	{
+			Cp	2696.7;
+			Hf	-254000.0;
+		}
+		equationOfState	{
+			rho	183.7;
+		}
+	}
+char	{
+		specie	{
+			nMoles	1;
+			molWeight	50;
+		}
+		transport	{
+			kappa	0.328;
+		}
+		thermodynamics	{
+			Cp	1450;
+			Hf	0;
+		}
+		equationOfState	{
+			rho	23.6;
+		}
+	}

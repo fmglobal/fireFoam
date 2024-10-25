@@ -1,0 +1,4 @@
+- Parallel panel test with inert panel surfaces.
+- Panels are 8' (2.4m) tall x 2' (0.6m) wide, spaced 1' (0.3m) apart
+- Setup is based on FM Approvals Standard 4910
+- Data outputs are useful for comparison to MaCFP-3 Workshop data, see https://github.com/MaCFP/macfp-db/tree/master/Fire_Growth/NIST_Parallel_Panel/Documentation

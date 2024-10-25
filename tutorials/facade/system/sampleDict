@@ -1,0 +1,76 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  dev                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class        dictionary;
+    location    "system";
+    object      sampleDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+type	surfaces;
+//type    sets;
+libs    ("libsampling.so");
+setFormat raw;
+surfaceFormat vtk;//foam;
+
+interpolationScheme cellPoint;
+//interpolationScheme cell;
+//interpolationScheme cellPointFace;
+
+fields
+(
+ 	//T
+	//U
+);
+
+sets
+(
+);
+
+surfaces
+(
+    centerPlane 
+    {
+        type            cuttingPlane;
+        planeType       pointAndNormal;
+        pointAndNormalDict
+        {
+            point   (0 0.01 0);
+            normal  (0 1 0);
+        }
+        interpolate     true;
+    }
+    
+    chamberXcut 
+    {
+        type            cuttingPlane;
+        planeType       pointAndNormal;
+        pointAndNormalDict
+        {
+            point   (-1.0 0 0);
+            normal  (1 0 0);
+        }
+        interpolate     true;
+    }
+
+    facadeXcut 
+    {
+        type            cuttingPlane;
+        planeType       pointAndNormal;
+        pointAndNormalDict
+        {
+            point   (0.51 0 0);
+            normal  (1 0 0);
+        }
+        interpolate     true;
+    }
+);
+

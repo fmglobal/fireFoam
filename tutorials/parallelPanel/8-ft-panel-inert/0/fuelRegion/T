@@ -1,0 +1,54 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1806                                 |
+|   \\  /    A nd           | Web:      http://www.OpenFOAM.com               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0/pyrolysisRegion";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 298.0;
+
+boundaryField
+{
+    fuel_top
+    {
+        type            constHTemperature;
+	value		$internalField;
+	Tinf		$internalField;
+	h		uniform 0.0;
+    }
+
+    region0_to_fuelRegion_fuel
+    {
+        type                compressible::pyrolysisTemperatureCoupled;
+        pyrolysisRegion     fuelRegion;
+        Tnbr                T;
+        K                   K;
+        kappaMethod         solidThermo;
+        kappaName           none;
+        emissivityMode      solidRadiation;
+        neighbourFieldRadiativeName     qin;
+        neighbourFieldConvectiveName    convectiveHeatFlux_T;
+        fieldRadiativeName  none;
+        fieldConvectiveName none;
+        qExtra              0.0;
+        value               $internalField;
+    }
+
+    oneDEmptyPatch
+    {
+        type            empty;
+    }
+}
+// ************************************************************************* //

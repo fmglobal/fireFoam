@@ -1,0 +1,71 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1806                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      radiationProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+radiation       on;
+
+radiationModel  fvDOM;
+
+noRadiation
+{
+}
+
+P1Coeffs
+{
+}
+
+fvDOMCoeffs
+{
+
+    nPhi    2; //3;     // azimuthal angles in PI/2 on X-Y.(from Y to X)
+    nTheta  2; //4;     // polar angles in PI (from Z to X-Y plane)
+    tolerance 1e-2;   // convergence criteria for radiation iteration
+    maxIter 5; //10;    // maximum number of iterations
+}
+
+// Number of flow iterations per radiation iteration
+solverFreq 20;
+
+absorptionEmissionModel constRadFractionEmission;
+
+constRadFractionEmissionCoeffs
+{
+    EhrrCoeff           0.22;
+    radScaling          true;
+    Ehrr1               0.35;
+    Ehrr2               0.22;
+    patch1              (burner);
+    patch2              (region0_to_solidFuelRegion_solidFuel);
+}
+scatterModel    none;
+
+constantScatterCoeffs
+{
+    sigma           sigma [ 0 -1 0 0 0 0 0 ] 0;
+    C               C [ 0 0 0 0 0 0 0 ] 0;
+}
+
+cloudScatterCoeffs
+{
+    cloudNames
+    (
+          reactingCloud1
+    );
+}
+
+transmissivityModel    none;
+
+// ************************************************************************* //

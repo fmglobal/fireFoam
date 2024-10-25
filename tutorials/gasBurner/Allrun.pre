@@ -1,0 +1,18 @@
+#!/bin/bash
+
+cd ${0%/*} || exit 1    # run from this directory
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+./Allclean
+runApplication -s default blockMesh -dict system/blockMeshDict.default 
+
+runApplication -s default snappyHexMesh -overwrite  -dict system/snappyHexMeshDict.default 
+
+runApplication -s burner topoSet -dict system/topoSetDict.burner 
+
+runApplication -s default createPatch -overwrite  -dict system/createPatchDict.default 
+
+cp -f 0/ph_rgh.orig	0/ph_rgh
+

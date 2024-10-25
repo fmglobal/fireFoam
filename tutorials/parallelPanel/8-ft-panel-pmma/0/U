@@ -1,0 +1,82 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.4.x                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    "0";
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    wall // the parallel panel structure (base and back panels)
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+    
+    HFgauge
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+
+    ground
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+
+    outlet
+    {
+        type            pressureInletOutletVelocity;
+        value           $internalField;
+    }
+
+    "(side|Radgauge)"
+    {
+        type            pressureInletOutletVelocity;
+        value           $internalField;
+    }
+
+    burner
+    {
+        type            flowRateInletVelocity;
+        massFlowRate    table
+        (
+            (0   0.000000) // ~ 0 kW
+            (20  0.000475) // ~ 22 kW
+            (40  0.001079) // ~ 50 kW
+            (60  0.001273) // ~ 59 kW
+            (80  0.001359) // ~ 63 kW
+            (120 0.001359) // ~ 63 kW 
+            (121 0.000000) // ~ 0  kW 
+        );
+        value           uniform (0 0 0);
+    }
+
+    region0_to_fuelRegion_fuel // panels
+    {
+        type            pyrolysisVelocityCoupled;
+        phi             phi;
+        nbrPhi          phiGas;
+        rho             rho;
+        hocVirgin       24.2e+6; // From SFPE handbook 3rd ed Table 3-4.14, deltaH_ch
+	charring	false;
+        value           uniform (0 0 0);
+    }
+
+}
+// ************************************************************************* //
