@@ -1,5 +1,5 @@
-#!/bin/bash  
-  
+#!/bin/bash
+
 # ----------------------------------------------------------------------  
 ## Installation script for FM's FireFOAM  
 # 
@@ -44,7 +44,7 @@ usage() {
     echo "Arguments:"  
     echo "  --version=VERSION                   Set the OpenFOAM version (default: 2306)."  
     echo "  --openfoam-branch=OPENFOAM_BRANCH   Set the OpenFOAM branch (default: maintenance-v2306)." 
-    echo "  --openfoam-commit=OPENFOAM_COMMIT   Set the OpenFOAM commit SHA to checkout (default: latest)."
+    echo "  --openfoam-commit=OPENFOAM_COMMIT   Set the OpenFOAM commit SHA to checkout (default: latest)."  
     echo "  --firefoam-branch=FIREFOAM_BRANCH   Set the FireFOAM branch (default: main)."  
     echo "  --openfoam-url=OPENFOAM_URL         Set the OpenFOAM URL (default: https://develop.openfoam.com/Development/openfoam.git)."  
     echo "  --thirdparty-url=THIRDPARTY_URL     Set the ThirdParty URL (default: https://sourceforge.net/projects/openfoam/files/v<VERSION>/ThirdParty-v<VERSION>.tgz)."  
@@ -151,15 +151,18 @@ if [ $START_STEP -le $STEP ]; then
   echo ========================================  
 fi  
 
-# 3) Checkout OpenFOAM branch
+# 3) Checkout OpenFOAM branch and commit
 STEP="$((STEP+1))"
 if [ $START_STEP -le $STEP ]; then
   echo ============ STEP $STEP ================
   echo "Checking out OpenFOAM branch: $OPENFOAM_BRANCH"
   cd $INSTALLATION_DIR/$MYOPENFOAM_REPO
   git checkout $OPENFOAM_BRANCH
+  
   if [ -n "$OPENFOAM_COMMIT" ]; then   # Check if commit SHA is provided
       echo "Checking out OpenFOAM commit: $OPENFOAM_COMMIT"
+      # Fetch the specific commit if needed
+      git fetch --depth=1 origin $OPENFOAM_COMMIT
       git checkout $OPENFOAM_COMMIT
   fi
   echo "...done."
@@ -217,5 +220,4 @@ if [ $START_STEP -le $STEP ]; then
   echo ========================================  
 fi  
   
-echo "Build completed on $(date)"  
-
+echo "Build completed on $(date)"
