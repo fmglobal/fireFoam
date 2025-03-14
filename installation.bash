@@ -28,7 +28,8 @@ set -eE
 
 # Initialize variables with default values  
 VERSION="2306"  
-OPENFOAM_BRANCH="maintenance-v$VERSION"  
+OPENFOAM_BRANCH="maintenance-v$VERSION"
+OPENFOAM_COMMIT=""
 FIREFOAM_BRANCH="main"  
 OPENFOAM_URL="https://develop.openfoam.com/Development/openfoam.git"  
 THIRDPARTY_URL="https://sourceforge.net/projects/openfoam/files/v$VERSION/ThirdParty-v$VERSION.tgz"  
@@ -42,7 +43,8 @@ usage() {
     echo  
     echo "Arguments:"  
     echo "  --version=VERSION                   Set the OpenFOAM version (default: 2306)."  
-    echo "  --openfoam-branch=OPENFOAM_BRANCH   Set the OpenFOAM branch (default: maintenance-v2306)."  
+    echo "  --openfoam-branch=OPENFOAM_BRANCH   Set the OpenFOAM branch (default: maintenance-v2306)." 
+    echo "  --openfoam-commit=OPENFOAM_COMMIT   Set the OpenFOAM commit SHA to checkout (default: latest)."
     echo "  --firefoam-branch=FIREFOAM_BRANCH   Set the FireFOAM branch (default: main)."  
     echo "  --openfoam-url=OPENFOAM_URL         Set the OpenFOAM URL (default: https://develop.openfoam.com/Development/openfoam.git)."  
     echo "  --thirdparty-url=THIRDPARTY_URL     Set the ThirdParty URL (default: https://sourceforge.net/projects/openfoam/files/v<VERSION>/ThirdParty-v<VERSION>.tgz)."  
@@ -58,6 +60,7 @@ while [[ "$#" -gt 0 ]]; do
     case $1 in  
         --version=*) VERSION="${1#*=}"; shift ;;  
         --openfoam-branch=*) OPENFOAM_BRANCH="${1#*=}"; shift ;;  
+        --openfoam-commit=*) OPENFOAM_COMMIT="${1#*=}"; shift ;; 
         --firefoam-branch=*) FIREFOAM_BRANCH="${1#*=}"; shift ;;  
         --openfoam-url=*) OPENFOAM_URL="${1#*=}"; shift ;;  
         --thirdparty-url=*) THIRDPARTY_URL="${1#*=}"; shift ;;  
@@ -79,6 +82,7 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 # Script logic using the variables  
 echo "The version is set to $VERSION"  
 echo "OpenFOAM branch is set to $OPENFOAM_BRANCH"  
+echo "OpenFOAM commit is set to $OPENFOAM_COMMIT" 
 echo "FireFOAM branch is set to $FIREFOAM_BRANCH"  
 echo "OpenFOAM URL is set to $OPENFOAM_URL"  
 echo "ThirdParty URL is set to $THIRDPARTY_URL"  
@@ -146,18 +150,22 @@ if [ $START_STEP -le $STEP ]; then
   echo "...done."  
   echo ========================================  
 fi  
-  
-# 3) Checkout OpenFOAM branch  
+
+# 3) Checkout OpenFOAM branch
 STEP="$((STEP+1))"
-if [ $START_STEP -le $STEP ]; then  
-  echo ============ STEP $STEP ================  
-  echo "Checking out OpenFOAM branch: $OPENFOAM_BRANCH"  
-  cd $INSTALLATION_DIR/$MYOPENFOAM_REPO  
-  git checkout $OPENFOAM_BRANCH  
-  echo "...done."  
-  echo ========================================  
-fi  
-  
+if [ $START_STEP -le $STEP ]; then
+  echo ============ STEP $STEP ================
+  echo "Checking out OpenFOAM branch: $OPENFOAM_BRANCH"
+  cd $INSTALLATION_DIR/$MYOPENFOAM_REPO
+  git checkout $OPENFOAM_BRANCH
+  if [ -n "$OPENFOAM_COMMIT" ]; then   # Check if commit SHA is provided
+      echo "Checking out OpenFOAM commit: $OPENFOAM_COMMIT"
+      git checkout $OPENFOAM_COMMIT
+  fi
+  echo "...done."
+  echo ========================================
+fi
+
 # 4) Checkout FireFOAM branch  
 STEP="$((STEP+1))"
 if [ $START_STEP -le $STEP ]; then  
