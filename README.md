@@ -21,7 +21,7 @@ git clone https://github.com/fmglobal/fireFoam.git FireFOAM-v2306
 cd FireFOAM-v2306
 chmod +x installation.bash
 cd ..
-./FireFOAM-v2306/installation.bash
+./FireFOAM-v2306/installation.bash --openfoam-commit=c423ebecc1cd1b4bb878e51705a59a1875d9d608
 ```
 
 This will yield the following structure:
