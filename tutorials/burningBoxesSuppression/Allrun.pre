@@ -10,8 +10,6 @@ cd ${0%/*} || exit 1    # run from this directory
 
 runApplication blockMesh
 
-cp system/decomposeParDict.snappy system/decomposeParDict
-
 runApplication snappyHexMesh -overwrite
 
 runApplication -s burner topoSet -dict system/topoSetDict.burner
@@ -29,5 +27,7 @@ sed -i 's/samplePatch     region0_to_filmRegion_solidFuel;/samplePatch     regio
 runApplication -s solidFuel extrudeToRegionMesh -overwrite -dict system/extrudeToRegionMeshDict.solidFuel
 
 cp 0/ph_rgh.orig 0/ph_rgh
+
+runApplication decomposePar -allRegions
 
 exit;
