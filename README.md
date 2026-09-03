@@ -115,7 +115,6 @@ This script will configure the FireFOAM case files and any existing SLURM job su
 In last-name alphabetical order:
 - Alex Krisman (alex.krisman@fmglobal.com)
 - Xiaoyi Lu (xiaoyi.lu@fmglobal.com)
-- Danyal Mohaddes (danyal.mohaddes@fmglobal.com)
 - Ning Ren (ning.ren@fmglobal.com)
 - Yi Wang (yi.wang@fmglobal.com)
 
@@ -124,4 +123,5 @@ In addition to the Maintainers, in last-name alphabetical order:
 - Prateep Chatterjee
 - Ankur Gupta
 - Karl Meredith
+- Danyal Mohaddes
 - Oluwayemisi Oluwole
