@@ -1,0 +1,51 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  codeql-analysis:
+    name: CodeQL
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      security-events: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: cpp
+
+      - name: Debug repo layout (list C/C++ files and CMakeLists)
+        run: |
+          echo "Top-level files:"
+          ls -la
+          echo "Find CMakeLists.txt locations:"
+          find . -maxdepth 4 -type f -name CMakeLists.txt -print
+          echo "Find source files with .C and .H extensions (case-sensitive):"
+          find . -maxdepth 6 -type f \( -name '*.C' -o -name '*.H' \) -print | sed -n '1,200p'
+
+      - name: Configure and build (CMake)
+        shell: bash
+        run: |
+          set -euo pipefail
+          # CMakeLists.txt is at repo root; build from root
+          mkdir -p build
+          cd build
+          # Export compile_commands.json so tools can pick up compile commands
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
+          # Build the project so CodeQL can trace the compiler invocations
+          cmake --build . -- -j$(nproc)
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v2
